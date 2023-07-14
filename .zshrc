@@ -1,4 +1,4 @@
-. /home/lr/.profile
+. ~/.profile
 
 # -------------- Aliases -------------- 
 alias zshreset='exec zsh -l'
@@ -41,16 +41,17 @@ esac
 declare _user=$(getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1)
 print "${(U)_user}'S SESSION CONNECTED | ${(U)$(date +%d\ %A\ \|\ WEEK:\ %W)}\n"
 
-# Append command time header
+# Append command execution time header
 preexec() {
-    print $fg[green]"$(date +%a-%R) $(for x in {11..$(tput cols)}; do echo -n ⏤; done;)\e[0m"
+  case $INSIDE_EMACS in
+    *comint*) ;;
+    *) print $fg[green]"$(date +%a-%R) $(for x in {11..$(tput cols)}; do echo -n ⏤; done;)\e[0m"
+    ;;
+  esac
 }
 
 # For UNIX terminals ONLY. Can crash with Linux Console!
-#function fix_cursor() {
-#	printf '\033[?112c'
-#}
-#fix_cursor
+#printf '\033[?112c'
 
 # -------------- Directory -------------- 
 # Remamber the last 5 directorys
@@ -63,13 +64,16 @@ zstyle ':chpwd:*' recent-dirs-file \
 
 # Generic/dynamic directory names
 function dir() { zsh_directory_name_generic "$@" }
+REPOS="$(realpath ~/)/repos"
 typeset -A zdn_association=(
-    r	~/repos
-    gh	~/repos/github
-    ghx	~/repos/github-external
-    gg	~/repos/gitgud
-    loc	~/repos/local
-    rem	~/repos/remote
+    r	$REPOS
+    gh	$REPOS/github
+    ghx	$REPOS/github-external
+    gg	$REPOS/gitgud
+    pb  $REPOS/paste-bin
+    loc	$REPOS/local
+    rem	$REPOS/remote
+    em  ~/.emacs.d
 )
 zstyle ':zdn:dir:' mapping zdn_association
 autoload -Uz add-zsh-hook zsh_directory_name_generic dir
@@ -87,7 +91,7 @@ zstyle ':completion::complete:*' gain-privileges 1
 # -------------- Custom Hooks -------------- 
 # Say something before exit
 local function byezsh() {
-    print "ZSH at $TTY say bye!"
+    print "ZSH exit $TTY. Bye $USER!"
 }
 add-zsh-hook zshexit byezsh
 
