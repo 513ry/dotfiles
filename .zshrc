@@ -38,8 +38,8 @@ case $INSIDE_EMACS in
   fi
   ;;
 esac
-declare _user=$(getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1)
-print "${(U)_user}'S SESSION CONNECTED | ${(U)$(date +%d\ %A\ \|\ WEEK:\ %W)}\n"
+declare session=$(tty | grep -Eo '[0-9]?[0-9]?[0-9]')
+print "${(U)session} SESSION CONNECTED | ${(U)$(date +%d\ %A\ \|\ WEEK:\ %W)}\n"
 
 # Append command execution time header
 preexec() {
@@ -54,7 +54,7 @@ preexec() {
 #printf '\033[?112c'
 
 # -------------- Directory -------------- 
-# Remamber the last 5 directorys
+# Remember the last 5 directories
 autoload -Uz chpwd_recent_dirs cdr
 add-zsh-hook chpwd chpwd_recent_dirs
 zstyle ':chpwd:*' recent-dirs-max 5
