@@ -23,6 +23,23 @@ add-zsh-hook precmd vcs_info
 
 PS1='%{$bg[green]$fg[black]%} λ %{$reset_color%}${vcs_info_msg_0_} %18<..<%F{green}%/%f '
 
+get_suffix() {
+  local number="$1"
+
+  printf "$number'"
+  if [[ "$number" == "11" || "$number" == "12" || "$number" == "13" ]]; then
+    echo "th"
+  elif [[ "$number" == "1" ]]; then
+    echo "st"
+  elif [[ "$number" == "2" ]]; then
+    echo "nd"
+  elif [[ "$number" == "3" ]]; then
+    echo "rd"
+  else
+    echo "th"
+  fi
+}
+
 # -------------- Header -------------- 
 # Load zsh colors
 autoload colors
@@ -38,8 +55,7 @@ case $INSIDE_EMACS in
   fi
   ;;
 esac
-declare session=$(tty | grep -Eo '[0-9]?[0-9]?[0-9]')
-print "${(U)session} SESSION CONNECTED | ${(U)$(date +%d\ %A\ \|\ WEEK:\ %W)}\n"
+print $(get_suffix $(tty | grep -Eo '[0-9]?[0-9]?[0-9]')), "SESSION CONNECTED | ${(U)$(date +%d\ %A\ \|\ WEEK:\ %W)}\n"
 
 # Append command execution time header
 preexec() {
@@ -50,7 +66,7 @@ preexec() {
   esac
 }
 
-# For UNIX terminals ONLY. Can crash with Linux Console!
+# For UNIX terminals ONLY. Can crash with the Linux Console!
 #printf '\033[?112c'
 
 # -------------- Directory -------------- 
