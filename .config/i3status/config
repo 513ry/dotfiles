@@ -1,0 +1,75 @@
+# i3status configuration file.
+
+general {
+        colors = false
+        interval = 5
+        output_format = "none"
+        separator = "  |  "
+}
+
+order += "wireless _first_"
+order += "memory"
+order += "tztime local"
+order += "read_file pulsevolume"
+
+# wireless _first_ {
+#         format_up = "%essid %quality %bitrate / %frequency"
+#         format_down = "W: down"
+# }
+
+wireless _first_ {
+    format_up = "|    %bitrate"
+    format_down = "|   "
+  }
+
+#ethernet _first_ {
+#        format_up = " E: %ip (%speed) "
+#        format_down = " E: down "
+#}
+
+battery all {
+  format = "%status %percentage %remaining"
+	status_chr = "⚡"
+	status_bat = "⚡"
+	status_unk = "⁇"
+	status_full= "☻"
+}
+
+#disk "/" {
+#        format = " %avail "
+#}
+
+#disk "/home" {
+#        format = " %avail "
+#}
+
+#load {
+#        format = " %1min "
+#}
+
+memory {
+        #format = "%used | %available"
+        format = "  %available"
+        threshold_degraded = "2G"
+        format_degraded = "‼ < %available"
+}
+
+tztime local {
+        format = "  W%U %m.%d %H:%M:%S"
+}
+
+volume master {
+        format = "󰓃₀ %volume"
+        format_muted = "⛔ %volume"
+        device = "pulse:0"
+}
+
+volume second {
+        format = "♪₁ %volume"
+        format_muted = "⛔ %volume"
+        device = "pulse:1"
+}
+
+read_file pulsevolume {
+        path = "/etc/pulsevolume.data"
+  }
