@@ -26,6 +26,8 @@ alias crmk='crystal build'
 alias ls='ls --color=auto'
 alias l='ls -l'
 alias la='ls -la'
+alias ly=~/.lsy.sh
+alias rm=~/.dwimrm.sh
 alias quit=exit
 alias clear=c
 # Show a nice, clean tree
