@@ -2,7 +2,7 @@
 
 declare -ir EXIT_SUCCESS=0
 
-declare -r DAY_DATE_FORMAT=%Y%m%d
+declare -r DAY_DATE_FORMAT=%y%m%d
 declare -r DATE_FORMAT=$DAY_DATE_FORMAT%H%M%S
 
 # Get date in format [M]:[D]:[H]:[M] or word today/yesterday/week/month
