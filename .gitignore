@@ -1,0 +1,11 @@
+*
+!*/
+!.gitignore
+
+!.bashrc
+!.zshrc
+!.profile
+!.dwimrm.sh
+!.lsy.sh
+!.config/i3/config
+!.config/i3status/config
