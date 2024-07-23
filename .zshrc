@@ -80,15 +80,17 @@ zstyle ':chpwd:*' recent-dirs-file \
 
 # Generic/dynamic directory names
 function dir() { zsh_directory_name_generic "$@" }
-REPOS="$(realpath ~/)/repos"
+REPOS="$HOME/repos"
 typeset -A zdn_association=(
-    r	$REPOS
+    r   $REPOS
+    or  $REPOS/or
     gh	$REPOS/github
     ghx	$REPOS/github-external
     gg	$REPOS/gitgud
     pb  $REPOS/paste-bin
     loc	$REPOS/local
     rem	$REPOS/remote
+    doc $HOME/Documents
     em  ~/.emacs.d
 )
 zstyle ':zdn:dir:' mapping zdn_association
