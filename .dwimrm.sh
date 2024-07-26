@@ -79,8 +79,13 @@ function dwimrm() {
 		fi
 	done
 
-	echo "to_move:   ${to_move[*]}"
-	echo "to_remove: ${to_remove[*]}"
+	if [ ${#to_move[@]} -gt 0 ]; then
+		echo "To move:   ${to_move[*]}"
+	fi
+
+	if [ ${#to_remove[@]} -gt 0 ]; then
+		echo "To remove: ${to_remove[*]}"
+	fi
 
 	# Move files
 	for file in "${to_move[@]}"; do
