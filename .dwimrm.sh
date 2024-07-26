@@ -15,7 +15,6 @@ declare -ir TERMINATE=3
 declare -i remove_all=1
 declare -i skip=1
 
-# Takes user input and returns 0 at YES, 1 at NO, 2 at ALWAYS, and 3 at SKIP
 #NOTE:
 # Command options -n, will prevent from removing any files (Ss), and -y will
 # enforce to always remove files (Aa). If any of the above options has been
@@ -30,11 +29,11 @@ function yes_no_always {
 		N | n | '') return 1 ;;
 		A | a)
 			remove_all=0
-			return 2
+			return 0
 			;;
 		S | s)
-			skip=0
-			return 3
+			exit $EXIT_SUCCESS
+			return 1
 			;;
 		esac
 	done
@@ -73,6 +72,8 @@ function dwimrm() {
 	for file in $@; do
 		if [ $YUNK == $(realpath -- "$file" | xargs dirname) ]; then
 			to_remove+=($file)
+		elif [ file == '-r' ]; then
+			:
 		else
 			to_move+=($file)
 		fi
@@ -94,15 +95,12 @@ function dwimrm() {
 	# Remove files
 	for file in "${to_remove[@]}"; do
 		declare -il opt
-		if [ $remove_all -eq 1 ] && [ $skip -eq 1 ]; then
+
+		if [ $remove_all -eq 0 ]; then
+			opt=0
+		elif [ $remove_all -eq 1 ]; then
 			yes_no_always "Do you want to remove this data forever [$file]?"
 			opt=$?
-		fi
-
-		if [ $skip -eq 0 ]; then
-			opt=1
-		elif [ $remove_all -eq 0 ]; then
-			opt=0
 		fi
 
 		if [ $opt -eq 0 ]; then
