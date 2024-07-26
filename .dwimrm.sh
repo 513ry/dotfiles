@@ -72,7 +72,7 @@ function dwimrm() {
 	for file in $@; do
 		if [ $YUNK == $(realpath -- "$file" | xargs dirname) ]; then
 			to_remove+=($file)
-		elif [ file == '-r' ]; then
+		elif [ $file == '-r' ]; then
 			:
 		else
 			to_move+=($file)
