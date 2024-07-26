@@ -2,8 +2,7 @@
 
 declare -ir EXIT_SUCCESS=0
 
-declare -r DAY_DATE_FORMAT=%y%m%d
-declare -r DATE_FORMAT=$DAY_DATE_FORMAT%H%M%S
+declare -r DAY_DATE_FORMAT=${DATE_FORMAT:0:6}
 
 # Get date in format [M]:[D]:[H]:[M] or word today/yesterday/week/month
 if [ -z $1 ]; then

@@ -6,9 +6,13 @@ FUNCNEST=400
 set editing-mode emacs
 export EDITOR=emacs
 export BROWSER=firefox
-export YUNK=~/.local/share/yunk
 export WALLPAPER=~/Pictures/Wallpaper/howls-castle.jpg
 export UNIT_SCREEN=eDP1
+
+# dwimrm will move files to this direcotry
+export YUNK=~/.local/share/yunk
+# Date format for unique yunk file names
+export DATE_FORMAT=%y%m%d%H%M%S
 
 # Set terminal default colors
 eval "$(dircolors)"

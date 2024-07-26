@@ -1,14 +1,12 @@
 #!/usr/bin/bash
-# This file assumes you have YUNK environment variable set for your shell !!
+# This file assumes you have YUNK and DATE_FORMAT environment variable set for
+# your shell !!
 
 # Exit codes
 declare -ir EXIT_SUCCESS=0
 declare -ir OPTIONS_ERROR=1
 declare -ir INVALID_FILE=2
 declare -ir TERMINATE=3
-
-# Date format for unique yunk file names
-declare -r DATE_FORMAT=%y%m%d%H%M%S
 
 # Options
 #declare quiet
@@ -50,22 +48,22 @@ function yes_no_always {
 # dwimrm [ [-y] [-n] ] [ [-q] [-v] ]
 
 #TODO: Handle options and remove them from argument list
-function options() {
-	echo $1
-}
+#function options() {
+#	echo $1
+#}
 
 function dwimrm() {
-	# Handle empty argument as exit to escape fzf
-	if [ -z "$1" ]; then
-		return $TERMINATE
-	fi
-
 	# Run fzf search when no argument found
 	if [ $# -eq -1 ]; then
 		echo 'No argument supplied'
 		declare -rl file=$(fzf)
 		echo $(dwimrm "$file")
 		return $EXIT_SUCCESS
+	fi
+
+	# Handle empty argument as exit to escape fzf
+	if [ -z "$1" ]; then
+		return $TERMINATE
 	fi
 
 	declare -al to_move
