@@ -8,6 +8,11 @@ alias cd="pushd -q"
 autoload -U select-word-style
 select-word-style bash
 
+# -------------- Autocomplete -------------- 
+autoload -Uz compinit
+compinit
+zstyle ':completion::complete:*' gain-privileges 1
+
 # -------------- Prompt -------------- 
 setopt promptsubst 
 
@@ -21,7 +26,7 @@ zstyle ':vcs_info:*' formats ' [%F{yellow}%b%f]'
 # Always update before displaying the prompt
 add-zsh-hook precmd vcs_info
 
-PS1='%{$bg[green]$fg[black]%} λ %{$reset_color%}${vcs_info_msg_0_} %18<..<%F{green}%/%f '
+PS1='%{$bg[green]$fg[black]%} λ %{$reset_color%}${vcs_info_msg_0_} %F{green}%18<\<<%/%f '
 
 get_suffix() {
   local number="$1"
@@ -61,7 +66,7 @@ print $(get_suffix $(tty | grep -Eo '[0-9]?[0-9]?[0-9]')), "SESSION CONNECTED | 
 preexec() {
   case $INSIDE_EMACS in
     *comint*) ;;
-    *) print $fg[green]"$(date +%a-%R) $(for x in {11..$(tput cols)}; do echo -n ⏤; done;)\e[0m"
+    *) print $fg[green]"$(date +%a-%R) $(for x in {11..$(tput cols)}; do echo -n ─; done;)\e[0m"
     ;;
   esac
 }
@@ -90,6 +95,7 @@ typeset -A zdn_association=(
     pb  $REPOS/paste-bin
     loc	$REPOS/local
     rem	$REPOS/remote
+    fib $REPOS/fib
     doc $HOME/Documents
     em  ~/.emacs.d
 )
@@ -101,10 +107,30 @@ function cdg() {
     cd ~[$1]/$2
 }
 
-# -------------- Autocomplete -------------- 
-autoload -Uz compinit
-compinit
-zstyle ':completion::complete:*' gain-privileges 1
+function _cdg {
+  _arguments -C \
+    '1:shortcut:_cdg_shortcut_keys' \
+    '2:filename:_cdg_shortcut_paths'
+}
+
+# 4. Completion for first arg (shortcut key)
+function _cdg_shortcut_keys {
+  compadd -- ${(k)zdn_association}
+}
+
+function _cdg_shortcut_paths {
+  local shortcut=$words[2]     # word[2] is the first argument to `cdg`
+  local dirpath
+
+  # Expand the shortcut using `~[$shortcut]`
+  dirpath=$(print -r -- ~[$shortcut] 2>/dev/null)
+
+  if [[ -d "$dirpath" ]]; then
+    _files -W "$dirpath" -/
+  fi
+}
+
+compdef _cdg cdg
 
 # -------------- Custom Hooks -------------- 
 # Say something before exit
